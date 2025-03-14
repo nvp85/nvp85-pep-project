@@ -10,7 +10,7 @@ public class AccountDAO {
     public Account registerAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
         try {
-            String sql = "insert into Account (username, password) (?, ?);";
+            String sql = "insert into Account (username, password) values (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, account.username);
             preparedStatement.setString(2, account.password);
