@@ -60,7 +60,7 @@ public class SocialMediaController {
         if (account != null) {
             ctx.json(mapper.writeValueAsString(account));
         } else {
-            ctx.status(400);
+            ctx.status(401);
         }
     }
 }
