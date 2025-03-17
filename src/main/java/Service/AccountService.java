@@ -20,4 +20,12 @@ public class AccountService {
         }
         return null;
     }
+
+    public Account loginAccount(String username, String password) {
+        Account account = accountDAO.getAccountByUsername(username);
+        if (account != null && account.password.equals(password)) {
+            return account;
+        }
+        return null;
+    }
 }
