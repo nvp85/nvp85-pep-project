@@ -21,7 +21,7 @@ public class MessageService {
     
     public Message createMessage(Message message) {
         // check if the posted_by is a valid account_id
-        Account account = accountDAO.geAccountById(message.getMessage_id());
+        Account account = accountDAO.getAccountById(message.getPosted_by());
         if (message.getMessage_text().length() > 0 && message.getMessage_text().length() < 255 && account != null) {
             return messageDAO.createMessage(message);
         }

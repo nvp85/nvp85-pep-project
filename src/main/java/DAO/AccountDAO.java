@@ -46,7 +46,7 @@ public class AccountDAO {
         return null;
     }
 
-    public Account geAccountById(int id) {
+    public Account getAccountById(int id) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "select * from Account where account_id = ?;";
