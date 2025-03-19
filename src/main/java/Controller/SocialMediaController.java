@@ -35,6 +35,7 @@ public class SocialMediaController {
         app.post("messages", this::createMessageHandler);
         app.get("messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
+        app.delete("messages/{message_id}", this::deleteMessageByIdHandler);
 
         return app;
     }
@@ -94,5 +95,17 @@ public class SocialMediaController {
         } catch(NumberFormatException e) {
             System.out.println("Invalid id format: " + e.getMessage());
         }
+    }
+
+    private void deleteMessageByIdHandler(Context ctx) {
+        try {
+            int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+            Message message = messageService.deleteMessageById(message_id);
+            if (message != null) {
+                ctx.json(message);
+            }
+        } catch(NumberFormatException e) {
+            System.out.println("Invalid id format: " + e.getMessage());
+        } 
     }
 }
