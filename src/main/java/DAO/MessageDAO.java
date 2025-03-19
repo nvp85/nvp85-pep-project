@@ -3,6 +3,8 @@ package DAO;
 import Model.Message;
 import Util.ConnectionUtil;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MessageDAO {
@@ -25,5 +27,27 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public List<Message> getAllMessages() {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+        try {
+            String sql = "select * from Message;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Message message = new Message(
+                    resultSet.getInt("message_id"),
+                    resultSet.getInt("posted_by"),
+                    resultSet.getNString("message_text"),
+                    resultSet.getLong("time_posted_epoch")
+                    );
+                messages.add(message);
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messages;
     }
 }
