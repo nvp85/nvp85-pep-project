@@ -36,6 +36,7 @@ public class SocialMediaController {
         app.get("messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
         app.delete("messages/{message_id}", this::deleteMessageByIdHandler);
+        app.get("accounts/{account_id}/messages", this::getMessagesByPosted_byHandler);
 
         return app;
     }
@@ -94,6 +95,7 @@ public class SocialMediaController {
             }
         } catch(NumberFormatException e) {
             System.out.println("Invalid id format: " + e.getMessage());
+            ctx.status(400);
         }
     }
 
@@ -106,6 +108,17 @@ public class SocialMediaController {
             }
         } catch(NumberFormatException e) {
             System.out.println("Invalid id format: " + e.getMessage());
+            ctx.status(400);
         } 
+    }
+
+    private void getMessagesByPosted_byHandler(Context ctx) {
+        try {
+            int posted_by = Integer.parseInt(ctx.pathParam("account_id"));
+            ctx.json(messageService.getMessagesByPosted_by(posted_by));
+        } catch(NumberFormatException e) {
+            System.out.println(e.getMessage());
+            ctx.status(400);
+        }
     }
 }
