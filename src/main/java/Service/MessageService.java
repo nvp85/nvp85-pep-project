@@ -40,4 +40,8 @@ public class MessageService {
     public Message deleteMessageById(int id) {
         return messageDAO.deleteMessageById(id);
     }
+
+    public List<Message> getMessagesByPosted_by(int posted_by) {
+        return messageDAO.getMessagesByPosted_by(posted_by);
+    }
 }
