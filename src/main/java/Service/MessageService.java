@@ -44,4 +44,13 @@ public class MessageService {
     public List<Message> getMessagesByPosted_by(int posted_by) {
         return messageDAO.getMessagesByPosted_by(posted_by);
     }
+
+    public Message updateMessageById(int id, String text) {
+        Message message = messageDAO.getMessageById(id);
+        if (message != null) {
+            messageDAO.updateMessageById(id, text);
+            return message;
+        }
+        return null;
+    }
 }
