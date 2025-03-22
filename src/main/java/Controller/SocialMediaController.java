@@ -6,6 +6,8 @@ import Model.*;
 import Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.*;
 
 
 /**
@@ -37,6 +39,7 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
         app.delete("messages/{message_id}", this::deleteMessageByIdHandler);
         app.get("accounts/{account_id}/messages", this::getMessagesByPosted_byHandler);
+        app.patch("messages/{message_id}", this::updateMessageByIdHandler);
 
         return app;
     }
@@ -116,6 +119,26 @@ public class SocialMediaController {
         try {
             int posted_by = Integer.parseInt(ctx.pathParam("account_id"));
             ctx.json(messageService.getMessagesByPosted_by(posted_by));
+        } catch(NumberFormatException e) {
+            System.out.println(e.getMessage());
+            ctx.status(400);
+        }
+    }
+
+    private void updateMessageByIdHandler(Context ctx)  throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> bodyMessage = mapper.readValue(ctx.body(), new TypeReference<Map<String, String>>() {});
+        if (!bodyMessage.containsKey("message_text") || bodyMessage.get("message_text").length() > 255 || bodyMessage.get("message_text").length() == 0) {
+            ctx.status(400);
+        }
+        try {
+            int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+            Message message = messageService.updateMessageById(message_id, bodyMessage.get("message_text"));
+            if (message == null) {
+                ctx.status(400);
+            } else {
+                ctx.json(message);
+            }
         } catch(NumberFormatException e) {
             System.out.println(e.getMessage());
             ctx.status(400);
