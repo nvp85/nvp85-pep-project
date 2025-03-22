@@ -49,6 +49,7 @@ public class MessageService {
         Message message = messageDAO.getMessageById(id);
         if (message != null) {
             messageDAO.updateMessageById(id, text);
+            message = messageDAO.getMessageById(id);
             return message;
         }
         return null;

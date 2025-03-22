@@ -128,8 +128,9 @@ public class SocialMediaController {
     private void updateMessageByIdHandler(Context ctx)  throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> bodyMessage = mapper.readValue(ctx.body(), new TypeReference<Map<String, String>>() {});
-        if (!bodyMessage.containsKey("message_text") || bodyMessage.get("message_text").length() > 255 || bodyMessage.get("message_text").length() == 0) {
+        if (!bodyMessage.containsKey("message_text") || (bodyMessage.get("message_text").length() > 255) || (bodyMessage.get("message_text").length() == 0)) {
             ctx.status(400);
+            return;
         }
         try {
             int message_id = Integer.parseInt(ctx.pathParam("message_id"));
