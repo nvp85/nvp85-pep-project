@@ -38,7 +38,16 @@ public class MessageService {
     }
 
     public Message deleteMessageById(int id) {
-        return messageDAO.deleteMessageById(id);
+        Message message = messageDAO.getMessageById(id);
+        if (message == null) {
+            return null;
+        }
+        int affectedRows = messageDAO.deleteMessageById(id);
+        // doublecheck if the message existed
+        if (affectedRows == 1) {
+            return message;
+        }
+        return null;
     }
 
     public List<Message> getMessagesByPosted_by(int posted_by) {
@@ -49,6 +58,7 @@ public class MessageService {
         Message message = messageDAO.getMessageById(id);
         if (message != null) {
             messageDAO.updateMessageById(id, text);
+            // retrieve the updated message to ensure accuracy 
             message = messageDAO.getMessageById(id);
             return message;
         }

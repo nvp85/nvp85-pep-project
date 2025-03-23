@@ -72,24 +72,19 @@ public class MessageDAO {
         return null;
     }
 
-    public Message deleteMessageById(int id) {
-        Message message = this.getMessageById(id);
-        if (message == null) {
-            return null;
-        }
+    // returns number of deleted rows (1 if the message was deleted, 0 if it didn't exist)
+    public int deleteMessageById(int id) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "delete from Message where message_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows == 1) {
-                return message;
-            }
+            return affectedRows;
         } catch(SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return 0;
     }
 
     public List<Message> getMessagesByPosted_by(int posted_by) {
