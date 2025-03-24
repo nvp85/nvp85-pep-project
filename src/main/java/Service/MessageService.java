@@ -55,12 +55,17 @@ public class MessageService {
     }
 
     public Message updateMessageById(int id, String text) {
+        if ((text.length() > 255) || (text.length() == 0)) {
+            return null;
+        }
         Message message = messageDAO.getMessageById(id);
         if (message != null) {
-            messageDAO.updateMessageById(id, text);
-            // retrieve the updated message to ensure accuracy 
-            message = messageDAO.getMessageById(id);
-            return message;
+            int affectedRows = messageDAO.updateMessageById(id, text);
+            if (affectedRows == 1) {
+                // retrieve the updated message to ensure accuracy (downside: additional db request)
+                message = messageDAO.getMessageById(id);
+                return message; 
+            }
         }
         return null;
     }
